@@ -21,14 +21,9 @@
 #include <AsyncTCP.h>
 #include <ESPAsyncWebServer.h>
 
-//Wink constants and variables.
-//Set LED for Uno or ESP32 Dev Kit on board blue LED.
-const int LED_BUILTIN = 2;    // ESP32 Kit
-//const int LED_BUILTIN = 13;    //Not really needed for Arduino UNO it is defined in library
-const int HIGH_TIME_LED = 900;
-const int LOW_TIME_LED = 100;
-long lastLEDtime = 0;
-long nextLEDchange = 100; //time in ms.
+//--------------- Includes ---------------------------
+#include "Arduino.h"
+#include "wink.h"
 
 
 
@@ -102,10 +97,12 @@ String outputState(int output){
 }
 
 void setup(){
-  //Use LED_BUILDIN to instrument start and stop of setup().
-  pinMode(LED_BUILTIN, OUTPUT);      // set the LED pin mode
-  digitalWrite(LED_BUILTIN, HIGH);   // turn the LED on (HIGH is the voltage level)
-  
+//  //Use LED_BUILDIN to instrument start and stop of setup().
+//  pinMode(LED_BUILTIN, OUTPUT);      // set the LED pin mode
+//  digitalWrite(LED_BUILTIN, HIGH);   // turn the LED on (HIGH is the voltage level)
+// 
+
+  setupWinkStart();
   // Serial port for debugging purposes
   Serial.begin(115200);
 
@@ -155,23 +152,12 @@ void setup(){
   // Start server
   server.begin();
 
-  digitalWrite(LED_BUILTIN, LOW);   // turn the LED off at end of setup  
+  setupWinkEnd();
 }//end setup()
 
 void loop() {
 
    // put your main code here, to run repeatedly:
 
-  //Wink the LED
-  if (((millis() - lastLEDtime) > nextLEDchange)||(millis()< lastLEDtime)) {
-    if (digitalRead(LED_BUILTIN) == LOW) {
-      digitalWrite(LED_BUILTIN, HIGH);   // turn the LED on (HIGH is the voltage level)
-      nextLEDchange = HIGH_TIME_LED;
-    } else {
-      digitalWrite(LED_BUILTIN, LOW);   // turn the LED on (HIGH is the voltage level)
-      nextLEDchange = LOW_TIME_LED;
-    }
-    lastLEDtime = millis();
-  }//end LED wink
-
+  winkLED_BUILTIN();
 }
