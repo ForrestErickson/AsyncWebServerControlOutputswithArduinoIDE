@@ -10,14 +10,35 @@
   
 *********/
 
+/*Add Wink into code and then going to make modules as a demonstration
+ * Forrest Erickson
+ * Date: 20210605
+ * 
+ */
+
 // Import required libraries
 #include <WiFi.h>
 #include <AsyncTCP.h>
 #include <ESPAsyncWebServer.h>
 
+//Wink constants and variables.
+//Set LED for Uno or ESP32 Dev Kit on board blue LED.
+const int LED_BUILTIN = 2;    // ESP32 Kit
+//const int LED_BUILTIN = 13;    //Not really needed for Arduino UNO it is defined in library
+const int HIGH_TIME_LED = 900;
+const int LOW_TIME_LED = 100;
+long lastLEDtime = 0;
+long nextLEDchange = 100; //time in ms.
+
+
+
 // Replace with your network credentials
-const char* ssid = "REPLACE_WITH_YOUR_SSID";
-const char* password = "REPLACE_WITH_YOUR_PASSWORD";
+//const char* ssid = "REPLACE_WITH_YOUR_SSID";
+//const char* password = "REPLACE_WITH_YOUR_PASSWORD";
+const char* ssid     = "NETGEAR_11N";     // Netgear WAC104 SN: 4SL373BC00087
+const char* password = "Heavybox201";  // Lab wifi router
+//const char* password = "Heavybox202";  // bad pw.
+
 
 const char* PARAM_INPUT_1 = "output";
 const char* PARAM_INPUT_2 = "state";
@@ -81,6 +102,10 @@ String outputState(int output){
 }
 
 void setup(){
+  //Use LED_BUILDIN to instrument start and stop of setup().
+  pinMode(LED_BUILTIN, OUTPUT);      // set the LED pin mode
+  digitalWrite(LED_BUILTIN, HIGH);   // turn the LED on (HIGH is the voltage level)
+  
   // Serial port for debugging purposes
   Serial.begin(115200);
 
@@ -129,8 +154,24 @@ void setup(){
 
   // Start server
   server.begin();
-}
+
+  digitalWrite(LED_BUILTIN, LOW);   // turn the LED off at end of setup  
+}//end setup()
 
 void loop() {
+
+   // put your main code here, to run repeatedly:
+
+  //Wink the LED
+  if (((millis() - lastLEDtime) > nextLEDchange)||(millis()< lastLEDtime)) {
+    if (digitalRead(LED_BUILTIN) == LOW) {
+      digitalWrite(LED_BUILTIN, HIGH);   // turn the LED on (HIGH is the voltage level)
+      nextLEDchange = HIGH_TIME_LED;
+    } else {
+      digitalWrite(LED_BUILTIN, LOW);   // turn the LED on (HIGH is the voltage level)
+      nextLEDchange = LOW_TIME_LED;
+    }
+    lastLEDtime = millis();
+  }//end LED wink
 
 }
