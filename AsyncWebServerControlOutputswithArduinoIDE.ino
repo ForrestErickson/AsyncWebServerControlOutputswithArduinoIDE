@@ -13,6 +13,8 @@
 /*Add Wink into code and then going to make modules as a demonstration
  * Forrest Erickson
  * Date: 20210605
+ * Date: 20210606 Break wink out into .h and .cpp files.
+ * Date: 20210607 Break http page and string processor into .h and .cpp file
  * 
  */
 
@@ -26,8 +28,6 @@
 #include "wink.h"
 #include "http.h"
 
-//extern const char index_html; 
-
 // Replace with your network credentials
 //const char* ssid = "REPLACE_WITH_YOUR_SSID";
 //const char* password = "REPLACE_WITH_YOUR_PASSWORD";
@@ -36,43 +36,14 @@ const char* password = "Heavybox201";  // Lab wifi router
 //const char* password = "Heavybox202";  // bad pw.
 
 
-const char* PARAM_INPUT_1 = "output";
-const char* PARAM_INPUT_2 = "state";
-
 // Create AsyncWebServer object on port 80
 AsyncWebServer server(80);
 
 
-
-// Replaces placeholder with button section in your web page
-String processor(const String& var){
-  //Serial.println(var);
-  if(var == "BUTTONPLACEHOLDER"){
-    String buttons = "";
-    buttons += "<h4>Output - GPIO 2</h4><label class=\"switch\"><input type=\"checkbox\" onchange=\"toggleCheckbox(this)\" id=\"2\" " + outputState(2) + "><span class=\"slider\"></span></label>";
-    buttons += "<h4>Output - GPIO 4</h4><label class=\"switch\"><input type=\"checkbox\" onchange=\"toggleCheckbox(this)\" id=\"4\" " + outputState(4) + "><span class=\"slider\"></span></label>";
-    buttons += "<h4>Output - GPIO 33</h4><label class=\"switch\"><input type=\"checkbox\" onchange=\"toggleCheckbox(this)\" id=\"33\" " + outputState(33) + "><span class=\"slider\"></span></label>";
-    return buttons;
-  }
-  return String();
-}
-
-String outputState(int output){
-  if(digitalRead(output)){
-    return "checked";
-  }
-  else {
-    return "";
-  }
-}
-
 void setup(){
 //  //Use LED_BUILDIN to instrument start and stop of setup().
-//  pinMode(LED_BUILTIN, OUTPUT);      // set the LED pin mode
-//  digitalWrite(LED_BUILTIN, HIGH);   // turn the LED on (HIGH is the voltage level)
-// 
-
   setupWinkStart();
+  
   // Serial port for debugging purposes
   Serial.begin(115200);
 
@@ -97,10 +68,14 @@ void setup(){
   server.on("/", HTTP_GET, [](AsyncWebServerRequest *request){
     extern const char index_html[] ;   
     request->send_P(200, "text/html", index_html, processor); 
-  });
+  });//end Sever.on("/"... 
 
   // Send a GET request to <ESP_IP>/update?output=<inputMessage1>&state=<inputMessage2>
   server.on("/update", HTTP_GET, [] (AsyncWebServerRequest *request) {
+    // Switch ID and States
+    const char* PARAM_INPUT_1 = "output";
+    const char* PARAM_INPUT_2 = "state";
+
     String inputMessage1;
     String inputMessage2;
     // GET input1 value on <ESP_IP>/update?output=<inputMessage1>&state=<inputMessage2>
@@ -118,7 +93,7 @@ void setup(){
     Serial.print(" - Set to: ");
     Serial.println(inputMessage2);
     request->send(200, "text/plain", "OK");
-  });
+  }); //end Sever.on("/update"... 
 
   // Start server
   server.begin();
