@@ -16,19 +16,18 @@
  * Date: 20210606 Break wink out into .h and .cpp files.
  * Date: 20210607 Break http page and string processor into .h and .cpp file
  * Date: 20210607 Break web page routes into .h and .cpp file
- * 
+ * Date: 20210607 Move GPIO setup into .h and .cpp file
  */
 
 // Import required libraries
 #include <WiFi.h>
-//#include <AsyncTCP.h>
-//#include <ESPAsyncWebServer.h>
 
 //--------------- Includes ---------------------------
 #include "Arduino.h"
 #include "wink.h"
 #include "http.h"
 #include "routes.h"
+#include "gpio.h"
 
 // Replace with your network credentials
 //const char* ssid = "REPLACE_WITH_YOUR_SSID";
@@ -47,12 +46,8 @@ void setup(){
   // Serial port for debugging purposes
   Serial.begin(115200);
 
-  pinMode(2, OUTPUT);
-  digitalWrite(2, LOW);
-  pinMode(4, OUTPUT);
-  digitalWrite(4, LOW);
-  pinMode(33, OUTPUT);
-  digitalWrite(33, LOW);
+  // Set GPIO pins as IO
+  setupGPIO();
   
   // Connect to Wi-Fi
   WiFi.begin(ssid, password);
