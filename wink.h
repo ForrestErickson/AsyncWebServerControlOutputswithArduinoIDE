@@ -1,6 +1,6 @@
 
-#ifndef wink.h
-#define wink.h
+#ifndef wink_
+#define wink_
 
 
 
