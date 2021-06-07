@@ -15,18 +15,20 @@
  * Date: 20210605
  * Date: 20210606 Break wink out into .h and .cpp files.
  * Date: 20210607 Break http page and string processor into .h and .cpp file
+ * Date: 20210607 Break web page routes into .h and .cpp file
  * 
  */
 
 // Import required libraries
 #include <WiFi.h>
-#include <AsyncTCP.h>
-#include <ESPAsyncWebServer.h>
+//#include <AsyncTCP.h>
+//#include <ESPAsyncWebServer.h>
 
 //--------------- Includes ---------------------------
 #include "Arduino.h"
 #include "wink.h"
 #include "http.h"
+#include "routes.h"
 
 // Replace with your network credentials
 //const char* ssid = "REPLACE_WITH_YOUR_SSID";
@@ -36,8 +38,6 @@ const char* password = "Heavybox201";  // Lab wifi router
 //const char* password = "Heavybox202";  // bad pw.
 
 
-// Create AsyncWebServer object on port 80
-AsyncWebServer server(80);
 
 
 void setup(){
@@ -64,39 +64,12 @@ void setup(){
   // Print ESP Local IP Address
   Serial.println(WiFi.localIP());
 
-  // Route for root / web page
-  server.on("/", HTTP_GET, [](AsyncWebServerRequest *request){
-    extern const char index_html[] ;   
-    request->send_P(200, "text/html", index_html, processor); 
-  });//end Sever.on("/"... 
-
-  // Send a GET request to <ESP_IP>/update?output=<inputMessage1>&state=<inputMessage2>
-  server.on("/update", HTTP_GET, [] (AsyncWebServerRequest *request) {
-    // Switch ID and States
-    const char* PARAM_INPUT_1 = "output";
-    const char* PARAM_INPUT_2 = "state";
-
-    String inputMessage1;
-    String inputMessage2;
-    // GET input1 value on <ESP_IP>/update?output=<inputMessage1>&state=<inputMessage2>
-    if (request->hasParam(PARAM_INPUT_1) && request->hasParam(PARAM_INPUT_2)) {
-      inputMessage1 = request->getParam(PARAM_INPUT_1)->value();
-      inputMessage2 = request->getParam(PARAM_INPUT_2)->value();
-      digitalWrite(inputMessage1.toInt(), inputMessage2.toInt());
-    }
-    else {
-      inputMessage1 = "No message sent";
-      inputMessage2 = "No message sent";
-    }
-    Serial.print("GPIO: ");
-    Serial.print(inputMessage1);
-    Serial.print(" - Set to: ");
-    Serial.println(inputMessage2);
-    request->send(200, "text/plain", "OK");
-  }); //end Sever.on("/update"... 
+  //Server routes set
+  serverOnHome();
+  serverOnUpdate();
 
   // Start server
-  server.begin();
+  serverBegin();
 
   setupWinkEnd();
 }//end setup()
