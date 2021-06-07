@@ -12,7 +12,7 @@
 extern AsyncWebServer myServer(80);
 
 // Start server
-void serverBegin(void){  
+void serverBegin(void) {
   myServer.begin();
 }
 

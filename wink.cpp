@@ -1,4 +1,8 @@
+/* wink.cpp
+    Winkes the LED_BUILTIN
 
+
+*/
 
 //--------------- Includes ---------------------------
 #include "Arduino.h"
@@ -25,7 +29,7 @@ void setupWinkStart(void) {
 
 void setupWinkEnd(void) {
   //Use LED_BUILDIN to instrument start and stop of setup().
-  digitalWrite(LED_BUILTIN, LOW);   // turn the LED off at end of setup  
+  digitalWrite(LED_BUILTIN, LOW);   // turn the LED off at end of setup
 }
 
 

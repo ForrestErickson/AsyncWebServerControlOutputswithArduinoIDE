@@ -1,8 +1,8 @@
 /* gpio.cpp
- *  pin setup
- *  
- *  
- */
+    pin setup
+
+
+*/
 
 //--------------- Includes ---------------------------
 #include "Arduino.h"
@@ -10,7 +10,7 @@
 
 //Setup GPIO
 
-void setupGPIO(void){
+void setupGPIO(void) {
   pinMode(2, OUTPUT);
   digitalWrite(2, LOW);
   pinMode(4, OUTPUT);

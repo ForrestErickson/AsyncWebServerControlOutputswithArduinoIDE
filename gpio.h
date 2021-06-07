@@ -1,10 +1,10 @@
 /* gpio.h
- *  pin setup
- *  
- *  
- */
+    pin setup
 
- 
+
+*/
+
+
 #ifndef gpio_
 #define gpio_
 

@@ -1,10 +1,10 @@
 /* http.h
- *  web pages
- *  
- *  
- */
+    web pages
 
- 
+
+*/
+
+
 #ifndef http_
 #define http_
 
