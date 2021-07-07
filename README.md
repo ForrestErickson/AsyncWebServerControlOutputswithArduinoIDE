@@ -5,6 +5,7 @@ I began this starting with the project at: https://randomnerdtutorials.com/esp32
 After initial commit, I then added my "Wink" code to the setup() and loop() and verified function.
 I then began to make tabs in the Arduino IDE for .h and .cpp files for the functionality I was pulling out of the main sketch.
 
+![Screen shot](ProjectScreenShot.png)
 
 Here is the GIT LOG showing in inverse cronology the steps I made to moduularize the code.
 
